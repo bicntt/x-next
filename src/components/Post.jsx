@@ -22,7 +22,7 @@ export default function Post({post, id}) {
                 <img src={post?.image} alt="post-img" className='rounded-2xl mr-2 '/>
             </Link>
 
-            <Icons id={id}/>
+            <Icons id={id} uid={post.uid}/>
         </div>
     </div>
   )
