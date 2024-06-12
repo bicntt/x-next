@@ -7,7 +7,8 @@ import { HiX } from 'react-icons/hi'
 import { useEffect, useState } from 'react'
 const { useSession } = require('next-auth/react')
 import { app } from '../firebase'
-import { doc, getFirestore, onSnapshot } from 'firebase/firestore'
+import { addDoc, collection, doc, getFirestore, onSnapshot, serverTimestamp } from 'firebase/firestore'
+import { useRouter } from "next/navigation"
 
 export default function CommentModal() {
     const [open, setOpen] = useRecoilState(modalState)
@@ -16,6 +17,7 @@ export default function CommentModal() {
     const [input,setInput] = useState('')
     const { data: session } = useSession()
     const db = getFirestore(app)
+    const router = useRouter()
 
     useEffect(() => {
         if (postId !== '') {
@@ -33,7 +35,19 @@ export default function CommentModal() {
     }, [postId])
 
     const sendComment = async () => {
-        
+        addDoc(collection(db, 'posts', postId, 'comments'),{
+            name: session.user.name,
+            username: session.user.username,
+            userImg: session.user.image,
+            comment: input,
+            timestamp: serverTimestamp()
+        }).then(() => {
+            setInput('')
+            setOpen(false)
+            router.push(`/posts/${postId}`)
+        }).catch((error) => {
+            console.log('Error adding document: ', error)
+        })
     }
 
     return (
@@ -91,7 +105,7 @@ export default function CommentModal() {
                                 <div className="flex items-center justify-end pt-2.5 ">
                                     <button 
                                     disabled={input.trim() === ''}
-                                    onClick={sendComment}
+                                    onClick={ () => sendComment()}
                                     className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50">
                                         Reply
                                     </button>
