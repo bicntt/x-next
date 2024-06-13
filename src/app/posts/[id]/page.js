@@ -3,6 +3,7 @@ import {app} from '../../../firebase'
 import { HiArrowLeft } from 'react-icons/hi'
 import Link from 'next/link'
 import Post from '@/components/Post'
+import Comments from '@/components/Comments'
 
 export default async function PostPage({params}) {
     const db = getFirestore(app)
@@ -19,6 +20,7 @@ export default async function PostPage({params}) {
         </div>
         
         <Post post={data} id={data.id} />
+        <Comments id={params.id}/>
     </div>
   )
 }

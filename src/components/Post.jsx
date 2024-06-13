@@ -2,6 +2,7 @@ import Link from 'next/link'
 import {HiDotsHorizontal} from 'react-icons/hi'
 import Icons from './Icons'
 
+
 export default function Post({post, id}) {
   return (
     <div className='flex p-3 border-b border-gray-200 hover:bg-gray-100'>
@@ -23,6 +24,7 @@ export default function Post({post, id}) {
             </Link>
 
             <Icons id={id} uid={post.uid}/>
+            
         </div>
     </div>
   )
